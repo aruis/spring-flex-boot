@@ -8,7 +8,7 @@ additionalCompilerOptions = [
 ]
 
 htmlWrapper {
-    file = 'index.html'
+    file = 'index.jsp'
     swf = './swf/swf'
     output = '/Users/liurui/develop/workspace-study/gradle/spring-flex-boot/java/boot/src/main/webapp/'
 }
