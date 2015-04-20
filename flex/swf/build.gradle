@@ -1,0 +1,25 @@
+type = 'swf'
+
+frameworkLinkage = 'merged'
+additionalCompilerOptions = [
+        '-debug=true',
+        '-context-root=/',
+        '-services=/Users/liurui/develop/workspace-study/gradle/spring-flex-boot/java/boot/src/main/webapp/WEB-INF/flex/services-config.xml'
+]
+
+htmlWrapper {
+    file = 'index.html'
+    swf = './swf/swf'
+    output = '/Users/liurui/develop/workspace-study/gradle/spring-flex-boot/java/boot/src/main/webapp/'
+}
+
+createHtmlWrapper {
+    dependsOn 'compileFlex'
+}
+
+buildDir = '/Users/liurui/develop/workspace-study/gradle/spring-flex-boot/java/boot/src/main/webapp/swf/'
+
+dependencies {
+    merged project(':flex:swc')
+}
+

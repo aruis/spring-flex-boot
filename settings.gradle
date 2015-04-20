@@ -1,0 +1,6 @@
+rootProject.name = 'spring-flex-boot'
+
+include 'flex',
+        'flex:swc', 'flex:swf',
+        'java',
+        'java:boot'

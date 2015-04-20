@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark"
+        >
+    <fx:Declarations>
+        <s:RemoteObject id="bridgeRemoteObject" destination="bridge">
+            <s:method name="hello" result="method1_resultHandler(event)" fault="method1_faultHandler(event)"/>
+        </s:RemoteObject>
+    </fx:Declarations>
+
+    <fx:Script><![CDATA[
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+
+        import spark.components.Alert;
+
+        private function button1_clickHandler(event:MouseEvent):void {
+            bridgeRemoteObject.hello()
+//            Call.java('bridge', 'hello', function (e:ResultEvent):void {
+//                Alert.show(e.result + "")
+//            })
+        }
+
+        private function method1_resultHandler(event:ResultEvent):void {
+            Alert.show("成功了\n" + event.result + "")
+        }
+
+        private function method1_faultHandler(fault:FaultEvent):void {
+            Alert.show('又失败了\n' + fault.message + '\n' + fault.fault)
+        }
+        ]]></fx:Script>
+    <s:Button click="button1_clickHandler(event)" label="!!!Say Hello"/>
+</s:Application>

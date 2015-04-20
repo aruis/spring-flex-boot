@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/java/boot/boot.iml" filepath="$PROJECT_DIR$/java/boot/boot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/flex/flex.iml" filepath="$PROJECT_DIR$/flex/flex.iml" />
+      <module fileurl="file://$PROJECT_DIR$/java/java.iml" filepath="$PROJECT_DIR$/java/java.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-flex-boot.iml" filepath="$PROJECT_DIR$/spring-flex-boot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/flex/swc/swc.iml" filepath="$PROJECT_DIR$/flex/swc/swc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/flex/swf/swf.iml" filepath="$PROJECT_DIR$/flex/swf/swf.iml" />
+    </modules>
+  </component>
+</project>

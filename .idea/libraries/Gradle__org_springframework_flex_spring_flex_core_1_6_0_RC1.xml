@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.springframework.flex:spring-flex-core:1.6.0.RC1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.flex/spring-flex-core/1.6.0.RC1/cfccd330e58b1bc1c923edbc597e7836ce2a4353/spring-flex-core-1.6.0.RC1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.flex/spring-flex-core/1.6.0.RC1/870b3cd87114f6f212ce5d99fd84714c56386c0d/spring-flex-core-1.6.0.RC1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
