@@ -10,7 +10,7 @@ buildscript {
 
 subprojects {
     apply plugin: 'gradlefx'
-    flexHome = '/Users/liurui/develop/sdk/4.14.1'
+    flexHome = '/Users/liurui/develop/sdk/flex/4.14.1'
     srcDirs = ['src']
 }
 

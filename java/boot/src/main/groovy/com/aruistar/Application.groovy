@@ -1,4 +1,4 @@
-package com.cm.aruis
+package com.aruistar
 
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -16,18 +16,18 @@ class Application {
         SpringApplication.run(Application.class, args)
     }
 
-    @Bean
-    public DispatcherServlet dispatcherServlet() {
+    public DispatcherServlet flexDispatcherServlet() {
         XmlWebApplicationContext appContext = new XmlWebApplicationContext();
-        appContext.setConfigLocation("classpath:/META-INF/application-config.xml");
+        appContext.setConfigLocation("classpath:/META-INF/flex-servlet.xml");
         return new DispatcherServlet(appContext);
     }
 
     @Bean
     public ServletRegistrationBean dispatcherRegistrationFlex() {
-        ServletRegistrationBean registration = new ServletRegistrationBean(dispatcherServlet(), "/messagebroker/*");
-        registration.addUrlMappings("/messagebroker/*")
+        ServletRegistrationBean registration = new ServletRegistrationBean(flexDispatcherServlet(), "/messagebroker/*");
+        registration.name = 'flex'
         registration.setLoadOnStartup(1)
         return registration;
     }
+
 }

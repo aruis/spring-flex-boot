@@ -1,6 +1,5 @@
-package com.cm.aruis
+package com.aruistar
 
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.flex.remoting.RemotingDestination
 import org.springframework.flex.remoting.RemotingInclude
 import org.springframework.stereotype.Service
@@ -12,11 +11,6 @@ import org.springframework.stereotype.Service
 @Service('bridge')
 @RemotingDestination(channels = "my-amf")
 class Bridge {
-
-    @Value('${url}')
-    String url
-    @Value('${url}')
-    String bus
 
     @RemotingInclude
     public String hello() {

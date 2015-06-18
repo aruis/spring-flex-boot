@@ -10,7 +10,7 @@
 
     <!--<bean id="bridge" class="com.cm.aruis.Bridge"/>-->
 
-    <flex:message-broker/>
+    <flex:message-broker mapping-order="0" services-config-path="classpath:META-INF/flex/services-config.xml"/>
 
     <!--<flex:remoting-destination ref="bridge"/>-->
     <!--<context:annotation-config/>-->

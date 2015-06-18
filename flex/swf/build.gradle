@@ -4,22 +4,19 @@ frameworkLinkage = 'merged'
 additionalCompilerOptions = [
         '-debug=true',
         '-context-root=/',
-        '-services=/Users/liurui/develop/workspace-study/gradle/spring-flex-boot/java/boot/src/main/webapp/WEB-INF/flex/services-config.xml'
+        '-services=' + project(':java:boot').projectDir.toString() + '/src/main/resources/META-INF/flex/services-config.xml'
 ]
 
 htmlWrapper {
-    file = 'index.jsp'
+    file = 'index.html'
     swf = './swf/swf'
-    output = '/Users/liurui/develop/workspace-study/gradle/spring-flex-boot/java/boot/src/main/webapp/'
+    output = project(':java:boot').projectDir.toString() + '/src/main/resources/public/'
 }
 
-createHtmlWrapper {
-    dependsOn 'compileFlex'
-}
-
-buildDir = '/Users/liurui/develop/workspace-study/gradle/spring-flex-boot/java/boot/src/main/webapp/swf/'
+buildDir = project(':java:boot').projectDir.toString() + '/src/main/resources/public/swf/'
 
 dependencies {
     merged project(':flex:swc')
 }
 
+build.finalizedBy createHtmlWrapper
