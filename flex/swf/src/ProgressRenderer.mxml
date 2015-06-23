@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<!--
+  Created by liurui on 15/6/19.
+-->
+<s:GridItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark"
+                    xmlns:c="com.aruistar.compoments.*">
+    <c:SparkProgressBar label="{data.label}" progress="{data.progress}"/>
+</s:GridItemRenderer>

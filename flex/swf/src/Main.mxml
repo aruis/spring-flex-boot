@@ -1,32 +1,113 @@
 <?xml version="1.0"?>
 <s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark"
+               xmlns:mx="library://ns.adobe.com/flex/mx"
         >
-    <fx:Declarations>
-        <s:RemoteObject id="bridgeRemoteObject" destination="bridge">
-            <s:method name="hello" result="method1_resultHandler(event)" fault="method1_faultHandler(event)"/>
-        </s:RemoteObject>
-    </fx:Declarations>
-
     <fx:Script><![CDATA[
-        import mx.rpc.events.FaultEvent;
-        import mx.rpc.events.ResultEvent;
+        import mx.collections.ArrayCollection;
 
         import spark.components.Alert;
 
-        private function button1_clickHandler(event:MouseEvent):void {
-            bridgeRemoteObject.hello()
-//            Call.java('bridge', 'hello', function (e:ResultEvent):void {
-//                Alert.show(e.result + "")
-//            })
+        [Bindable]
+        public var fileList:ArrayCollection = new ArrayCollection();
+
+        private function addFileButton_clickHandler(event:MouseEvent):void {
+            var files:FileReferenceList = new FileReferenceList();
+            files.browse();
+            files.addEventListener(Event.SELECT, function (e:Event):void {
+                for each(var file:FileReference in files.fileList) {
+                    var isIn:Boolean = false;
+                    for each(var afiel:File in fileList) {
+                        if (file.name == afiel.name && file.size == afiel.size) {
+                            isIn = true;
+                        }
+                    }
+                    if (!isIn) {
+                        var fileItem:File = new File(file);
+                        fileItem.uploadCompleteFunction = fileUpload;
+                        fileItem.uploadFailFunction = function () {
+                            isUploading = false
+                        };
+                        fileList.addItem(fileItem);
+                    }
+
+                }
+            })
         }
 
-        private function method1_resultHandler(event:ResultEvent):void {
-            Alert.show("成功了\n" + event.result + "")
+        private function getSize(data:Object, column:GridColumn):String {
+            if (data.size > 1024 * 1024) {
+                return (data.size / (1024 * 1024)).toFixed(2) + 'MB';
+            } else if (data.size > 1024) {
+                return (data.size / 1024).toFixed(2) + 'KB';
+            } else {
+                return data.size + 'B';
+            }
         }
 
-        private function method1_faultHandler(fault:FaultEvent):void {
-            Alert.show('又失败了\n' + fault.message + '\n' + fault.fault)
+        private function deleteButton_clickHandler(event:MouseEvent):void {
+            var _file:File = fileDataGrid.selectedItem as File;
+            if (_file) {
+                if (_file.state == -1) {
+                    fileList.removeItem(fileDataGrid.selectedItem)
+                } else if (_file.state == 0) {
+                    Alert.show('正在上传的文件无法撤销。');
+                } else if (_file.state == 1) {
+                    Alert.show('已上传成功的文件无法撤销。')
+                }
+            }
+
+
+        }
+
+        [Bindable]
+        private var isUploading:Boolean = false;
+
+        private function updateFileButton_clickHandler(event:MouseEvent):void {
+            fileUpload();
+        }
+
+        private function fileUpload():void {
+            isUploading = true;
+
+            var firstFileNeedUpload:File;
+
+            for each(var file:File in fileList) {
+                if (file.state == -1) {
+                    firstFileNeedUpload = file;
+                    break;
+                }
+            }
+
+            if (firstFileNeedUpload) {
+                firstFileNeedUpload.upload();
+            } else {
+                isUploading = false;
+            }
         }
         ]]></fx:Script>
-    <s:Button click="button1_clickHandler(event)" label="!!!Say Hello"/>
+    <s:layout>
+        <s:VerticalLayout paddingTop="100" horizontalAlign="center"/>
+    </s:layout>
+    <s:Panel title="文件上传" width="650" height="460">
+        <s:layout>
+            <s:VerticalLayout gap="0"/>
+        </s:layout>
+        <s:DataGrid id="fileDataGrid" width="100%" height="100%" dataProvider="{fileList}" borderVisible="false">
+            <s:columns>
+                <s:ArrayCollection>
+                    <s:GridColumn headerText="文件名" dataField="name" width="200"/>
+                    <s:GridColumn dataField="大小" width="100" labelFunction="getSize"/>
+                    <s:GridColumn dataField="进度" itemRenderer="ProgressRenderer"/>
+                </s:ArrayCollection>
+            </s:columns>
+        </s:DataGrid>
+        <mx:HRule width="100%"/>
+        <s:HGroup width="100%" paddingLeft="5" paddingRight="5" height="36" verticalAlign="middle">
+            <s:Button id="addFileButton" label="添加文件" click="addFileButton_clickHandler(event)"/>
+            <s:Button id="deleteButton" label="撤销添加" click="deleteButton_clickHandler(event)"/>
+            <s:Spacer width="100%"/>
+            <s:Button id="updateFileButton" enabled="{!isUploading}" label="开始上传"
+                      click="updateFileButton_clickHandler(event)"/>
+        </s:HGroup>
+    </s:Panel>
 </s:Application>

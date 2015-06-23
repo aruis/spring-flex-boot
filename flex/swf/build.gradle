@@ -17,6 +17,7 @@ buildDir = project(':java:boot').projectDir.toString() + '/src/main/resources/pu
 
 dependencies {
     merged project(':flex:swc')
+    merged project(':flex:SparkProgressBar')
 }
 
 build.finalizedBy createHtmlWrapper

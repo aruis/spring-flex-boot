@@ -22,7 +22,7 @@ public final class Call {
 
 
         var ro:RemoteObject = new RemoteObject(dest);
-        ro.endpoint = "http://localhost:8080/messagebroker2/amf";
+        //ro.endpoint = "http://localhost:8080/messagebroker2/amf";
         var aopt:AbstractOperation = ro.getOperation(method);
 
 
