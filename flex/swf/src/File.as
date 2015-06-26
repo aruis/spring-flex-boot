@@ -95,7 +95,7 @@ public class File {
 
                 function update() {
                     step++;
-                    progress = parseFloat((step / list.length * 50).toFixed(2)) + 50;
+                    progress = parseFloat((step / list.length * 50 + 50).toFixed(2));
 
                     if (step > list.length) return;
 
