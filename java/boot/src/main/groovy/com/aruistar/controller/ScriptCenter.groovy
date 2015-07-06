@@ -14,13 +14,20 @@ class ScriptCenter {
     @RequestMapping("/script")
     @ResponseBody
     public String getScript(
-            @RequestParam(value = "script", required = true) String script,
+            @RequestParam(value = "script", required = true) String scriptID,
             @RequestParam(value = "ui", required = true) String ui) {
-        def s = """
-            var a = getValue('名称');
-            setValue('名称',a+'.');
-"""
 
-        return "function main${script}(){" + s.replaceAll(~/etValue\(/, "etValue('${ui}',") + " return true;}"
+        def script = """
+            var a = getValue('名称');
+            setValue('名称',a+'.');"""
+
+        def first = """
+        function main${scriptID}(){"""
+
+        def last = """
+            return true;
+        }"""
+
+        return first + script.replaceAll(~/etValue\(/, "etValue('${ui}',") + last
     }
 }
