@@ -4,7 +4,7 @@ buildscript {
         //maven.url "http://repo.spring.io/snapshot"
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.4.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.5.RELEASE")
     }
 }
 
@@ -16,9 +16,7 @@ apply plugin: 'spring-boot'
 sourceCompatibility = 1.5
 version = '1.0'
 
-run {
-    dependsOn ':flex:swf:build'
-}
+run.dependsOn project(':flex:swf').createHtmlWrapper
 
 repositories {
     mavenCentral()
@@ -26,6 +24,7 @@ repositories {
 }
 
 dependencies {
+    compile 'org.webjars:jquery:2.1.4'
 
     compile 'org.codehaus.groovy:groovy:2.4.3'
 //    compile 'org.codehaus.groovy:groovy-json:2.4.3'

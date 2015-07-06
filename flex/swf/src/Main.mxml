@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark"
-        >
+               creationComplete="creationCompleteHandler(event)">
     <fx:Declarations>
         <s:RemoteObject id="bridgeRemoteObject" destination="bridge">
             <s:method name="hello" result="method1_resultHandler(event)" fault="method1_faultHandler(event)"/>
@@ -8,17 +8,33 @@
     </fx:Declarations>
 
     <fx:Script><![CDATA[
+        import mx.events.FlexEvent;
         import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
+        import mx.utils.UIDUtil;
 
         import spark.components.Alert;
 
+        private var obj:Object = {名称: '嗨皮'};
+
+        private var uuid:String;
+
+        private var me = this;
+
         private function button1_clickHandler(event:MouseEvent):void {
-            bridgeRemoteObject.hello()
-//            Call.java('bridge', 'hello', function (e:ResultEvent):void {
-//                Alert.show(e.result + "")
-//            })
+            if (!beforeHello()) return;
+
+            bridgeRemoteObject.hello();
         }
+
+        private function beforeHello():Boolean {
+            return calljs() == 1
+        }
+
+        private function calljs():* {
+            return ExternalInterface.call('calljs', 'hello', uuid)
+        }
+
 
         private function method1_resultHandler(event:ResultEvent):void {
             Alert.show("成功了\n" + event.result + "")
@@ -27,6 +43,26 @@
         private function method1_faultHandler(fault:FaultEvent):void {
             Alert.show('又失败了\n' + fault.message + '\n' + fault.fault)
         }
+
+        private function creationCompleteHandler(event:FlexEvent):void {
+            uuid = UIDUtil.createUID();
+            uuid = uuid.replace(/-/g, '');
+
+            ExternalInterface.addCallback("getValue" + uuid, function (_id) {
+                return me[_id + 'Input'].text;
+            });
+
+            ExternalInterface.addCallback("setValue" + uuid, function (_id, value) {
+                me[_id + 'Input'].text = value;
+            })
+        }
         ]]></fx:Script>
+    <s:layout>
+        <s:VerticalLayout/>
+    </s:layout>
     <s:Button click="button1_clickHandler(event)" label="!!!Say Hello"/>
+    <s:HGroup>
+        <s:Label text="名称"/>
+        <s:TextInput id="名称Input"/>
+    </s:HGroup>
 </s:Application>

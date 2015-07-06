@@ -4,19 +4,91 @@ frameworkLinkage = 'merged'
 additionalCompilerOptions = [
         '-debug=true',
         '-context-root=/',
-        '-services=' + project(':java:boot').projectDir.toString() + '/src/main/resources/META-INF/flex/services-config.xml'
+        '-services=' + project(':java:boot').projectDir + '/src/main/resources/META-INF/flex/services-config.xml'
 ]
 
+mainClass = 'Main'
+
+output = 'index'
+
+resourceDirs = ['src/']
+
 htmlWrapper {
+    //汉字转码为html支持
     file = 'index.html'
-    swf = './swf/swf'
-    output = project(':java:boot').projectDir.toString() + '/src/main/resources/public/'
+    swf = 'index'
+    //output = '/Users/liurui/develop/workspace/cm/java:boot/src/main/webapp/'
 }
 
-buildDir = project(':java:boot').projectDir.toString() + '/src/main/resources/public/swf/'
+task copyFile(type: Copy) {
+    def _from = buildDir.toString() + "/";
+    def _into = project(':java:boot').projectDir.toString() + '/src/main/resources/public/';
+
+    ext._into = _into
+    from(_from) into(_into) exclude('**/*.as', '**/*.mxml')
+}
+
+task copyFileWhenRun(type: Copy) {
+    def _from = buildDir.toString() + "/";
+    def _into = project(':java:boot').projectDir.toString() + '/build/resources/main/public/';
+
+    ext._into = _into
+    from(_from) into(_into) exclude('**/*.as', '**/*.mxml')
+}
+
+copyFile << {
+    delEmptyDir(new File(_into))
+}
+
+createHtmlWrapper << {
+    changeFile()
+}
+
+
+createHtmlWrapper.dependsOn compileFlex
+createHtmlWrapper.finalizedBy copyFile
+copyFileWhenRun.dependsOn createHtmlWrapper
+
+/**
+ * 修改 生成的 index.html文件内容，给最终flash对象增加随机数标示，使得每次访问都重新请求swf文件
+ * @return
+ */
+def changeFile() {
+    File index = buildDir.listFiles().find { it.name == htmlWrapper.file }
+
+    String text = index.text;
+    text = text.replace('", "flashContent"', '?" + Math.random(), "flashContent"').replace('<script type="text/javascript" src="swfobject.js"></script>', '''
+        <script type="text/javascript" src="swfobject.js"></script>
+        <script src='/webjars/jquery/2.1.4/jquery.min.js'></script>
+        <script type="text/javascript" src="script/script.js"></script>
+''')
+    index.write text
+}
+
+/**
+ * 删除空目录
+ * @param _intoFile
+ * @return
+ */
+def delEmptyDir(_intoFile) {
+    List delDir = []
+    _intoFile.eachDirRecurse { file ->
+        if (file.listFiles().length == 0) {
+            delDir << file
+        } else {
+            delEmptyDir(file)
+        }
+    }
+
+    delDir.each {
+        it.deleteDir()
+    }
+}
+
+//buildDir = '/Users/liurui/develop/workspace/cm/java:boot/src/main/webapp/'
 
 dependencies {
     merged project(':flex:swc')
+    merged fileTree(dir: 'libs', include: ['*.swc'])
 }
 
-build.finalizedBy createHtmlWrapper
